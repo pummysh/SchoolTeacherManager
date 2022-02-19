@@ -1,15 +1,16 @@
 import { useEffect } from "react";
-import { useDispatch,useSelector} from "react-redux"
-import { getData } from "../Store/action";
-import {Header} from './Header';
 import { SideBar } from "./SideBar";
 import {Teacher} from './Teacher';
 import styled from './Header.module.css';
 import axios from "axios";
 import { useState } from "react";
-import {useParams} from "react-router-dom"
+import { useSearchParams } from "react-router-dom";
+
 export const Main=()=>{
+    let [searchParams, setSearchParams] = useSearchParams();
     
+    console.log('ans',setSearchParams);
+
     const [data,setData]=useState([]);
     const [pages,setPages]=useState(1);
 
@@ -17,16 +18,12 @@ export const Main=()=>{
     for(let i=0;i<pages;i++){
         arr.push(i+1);
     }
-
-    const {gender}=useParams();
-    console.log(gender);
-
-    const getData = (page,size,gender,sort)=>{
+    const getData = ()=>{
         
-        page=page || 1;
-        size=size || 2;
-        gender=gender || "";
-        sort = sort || 0;
+        let page=searchParams.get('page');
+        let size=searchParams.get('size');
+        let gender=searchParams.get('gender');
+        let sort=searchParams.get('sort');
         
         const requst={
            method: 'get',
@@ -46,15 +43,29 @@ export const Main=()=>{
 
     console.log("pages",pages,data);
     useEffect(()=>{
+        let page=searchParams.get('page')||1;
+        let size=searchParams.get('size')||2;
+        let gender=searchParams.get('gender')||"";
+        let sort=searchParams.get('sort')||0;
+        let params = {"page":page, "size":size, "gender":gender,"sort":sort};
+        setSearchParams(params);
         getData()
-    },[])
 
-    const dataget=()=>{
+    },[searchParams]);
+
+    const paginate=(num)=>{
+        let page=num;
+        let size=searchParams.get('size');
+        let gender=searchParams.get('gender');
+        let sort=searchParams.get('sort');
+        let params = {"page":page, "size":size, "gender":gender,"sort":sort};
+        setSearchParams(params);
         getData()
+
+
     }
 
     return <div >
-        <Header/>
         <SideBar func={getData} />
 
         <div className={styled.container}>
@@ -75,7 +86,7 @@ export const Main=()=>{
         <div>
             {
                 arr.map((e)=>
-                <button onClick={()=>getData(e,2,"",0)}>{e}</button>
+                <button onClick={()=>paginate(e)}>{e}</button>
                 )
             }
         </div>

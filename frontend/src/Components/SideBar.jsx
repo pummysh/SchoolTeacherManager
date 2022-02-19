@@ -1,18 +1,34 @@
 import styled from './Header.module.css' 
 import {useNavigate} from 'react-router';
+import { useSearchParams } from "react-router-dom";
+
 
 
 export const SideBar=({func})=>{
-    const Navigate=useNavigate();
+    let [searchParams, setSearchParams] = useSearchParams();
     
-    const gender=(gender)=>{
-       func(1,2,gender,0)
+    const gender=(d)=>{
+
+        let page=searchParams.get('page');
+        let size=searchParams.get('size');
+        let gender=d;
+        let sort=searchParams.get('sort');
+        let params = {"page":page, "size":size, "gender":gender,"sort":sort};
+        setSearchParams(params);
+
+       func()
        
     }
 
-    const sort=(sort)=>{
-        func(1,2,"",sort)
-        Navigate(`?gender=Male&sort=${sort}&page=1&size=3`)
+    const sort=(d)=>{
+        let page=searchParams.get('page');
+        let size=searchParams.get('size');
+        let gender=searchParams.get('gender');
+        let sort=d;
+        let params = {"page":page, "size":size, "gender":gender,"sort":sort};
+        setSearchParams(params);
+
+       func()
     }
 
     return <div className={styled.sidebar}>

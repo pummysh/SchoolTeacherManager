@@ -1,8 +1,7 @@
 .header{
     display: flex;
-    justify-content: space-between;
-    background-color: #071E3D;
-    padding: 1%;
+    flex-direction: column;
+    
     /* z-index: 40; */
 }
 
@@ -42,4 +41,11 @@ a{
 }
 img{
     width: 100%;
+}
+
+.firstBox{
+    display: flex;
+    justify-content: space-between;
+    background-color: #071E3D;
+    padding: 1%;
 }
